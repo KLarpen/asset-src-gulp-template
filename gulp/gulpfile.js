@@ -1,6 +1,6 @@
 "use strict";
-const   gulp            =       require("gulp"),
-        autoprefixer    =       require("autoprefixer"),
+const { src, dest, series, parallel } = require("gulp");
+const   autoprefixer    =       require("autoprefixer"),
         postcss         =       require('gulp-postcss'),
         del             =       require("del"),
         sourcemaps      =       require("gulp-sourcemaps"),
@@ -13,8 +13,8 @@ const   gulp            =       require("gulp"),
         cssnano         =       require("gulp-cssnano"),
         rename          =       require('gulp-rename'),
         watch           =       require("gulp-watch"),
-        htmlmin         =       require('gulp-htmlmin'),
-        run             =       require("run-sequence");
+        htmlmin         =       require('gulp-htmlmin');
+
 
 const path = {
     scss: '../src/scss/**/*.scss',
@@ -29,8 +29,10 @@ const path = {
     buildFonts: '../build/fonts/',
 
 };
-gulp.task('scss', function () {
-   return gulp.src(path.scss)
+
+function scss(cb) {
+    src(path.scss)
+       .pipe(watch(path.scss))
        .pipe(plumber())
        .pipe(sourcemaps.init())
        .pipe(sass({
@@ -40,69 +42,63 @@ gulp.task('scss', function () {
        .pipe(cssbeautify())
        .pipe(csscomb())
        .pipe(postcss([ autoprefixer('last 10 versions', '> 1%', 'ie 8', 'ie 7')]))
-       .pipe(gulp.dest(path.css))
+       .pipe(dest(path.css))
        .pipe(cssnano())
        .pipe(rename({suffix: '.min'}))
-       .pipe(gulp.dest(path.css));
-});
+       .pipe(dest(path.css));
+    cb();
+}
 
-gulp.task('js', function () {
-    return gulp.src(path.srcJs)
+function js(cb) {
+    src(path.srcJs)
+        .pipe(watch(path.srcJs))
         .pipe(plumber())
         .pipe(uglify())
         .pipe(rename({suffix: '.min'}))
-        .pipe(gulp.dest(path.buildJs));
-});
+        .pipe(dest(path.buildJs));
+    cb();
+}
 
-gulp.task('html', function () {
-    return gulp.src([path.srcHTML])
+function html(cb) {
+    src([path.srcHTML])
+      .pipe(watch(path.srcHTML))
+      .pipe(plumber())
       .pipe(htmlmin({ collapseWhitespace: true }))
-      .pipe(gulp.dest(path.buildHTML));
-});
+      .pipe(dest(path.buildHTML));
+    cb();
+}
 
-gulp.task('img', function () {
-   return gulp.src(path.srcImages)
+
+function img(cb) {
+    src(path.srcImages)
        .pipe(imagemin({
            optimizationLevel: 3,
            progressive: true,
            svgoPlugins: [{removeViewBox: false}],
            interlaced: true
        }))
-       .pipe(gulp.dest(path.buildImages));
-});
+       .pipe(dest(path.buildImages));
+    cb();
+}
 
 /*
 * After using the image optimization task "img" you should clean the folder src/image by task: 
 * "cleanSrcImg"
 * */
-gulp.task('cleanSrcImg', function () {
+function cleanSrcImg() {
     return del(['../src/image/**/*', '!../src/image', '!../src/image/.gitkeep'], {force: true});
-});
-
-gulp.task('watch', function () {
-   watch([path.scss], function () {
-       gulp.start('scss')
-   });
-   watch([path.srcJs], function () {
-       gulp.start('js')
-   });
-   watch([path.srcHTML], function () {
-    gulp.start('html')
-});
-   /* watch([path.srcImages], function () {
-       gulp.start('img');
-   }); */
-});
+}
 
 
-gulp.task('default', function (cb) {
-   run(
-       'scss',
-       'js',
-       'html',
-       'watch',
+// Make tasks public
+exports.scss    = scss;
+exports.js      = js;
+exports.html    = html;
+exports.img     = img;
+exports.cleanSrcImg = cleanSrcImg;
 
-       cb
-   )
-});
-
+exports.default = series(
+    scss, 
+    js, 
+    html 
+);
