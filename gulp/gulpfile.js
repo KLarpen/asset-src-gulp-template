@@ -30,7 +30,7 @@ const path = {
 
 };
 gulp.task('scss', function () {
-   gulp.src(path.scss)
+   return gulp.src(path.scss)
        .pipe(plumber())
        .pipe(sourcemaps.init())
        .pipe(sass({
@@ -43,32 +43,32 @@ gulp.task('scss', function () {
        .pipe(gulp.dest(path.css))
        .pipe(cssnano())
        .pipe(rename({suffix: '.min'}))
-       .pipe(gulp.dest(path.css))
+       .pipe(gulp.dest(path.css));
 });
 
 gulp.task('js', function () {
-    gulp.src(path.srcJs)
+    return gulp.src(path.srcJs)
         .pipe(plumber())
         .pipe(uglify())
         .pipe(rename({suffix: '.min'}))
-        .pipe(gulp.dest(path.buildJs))
+        .pipe(gulp.dest(path.buildJs));
 });
 
 gulp.task('html', function () {
-    gulp.src([path.srcHTML])
+    return gulp.src([path.srcHTML])
       .pipe(htmlmin({ collapseWhitespace: true }))
       .pipe(gulp.dest(path.buildHTML));
 });
 
 gulp.task('img', function () {
-   gulp.src(path.srcImages)
+   return gulp.src(path.srcImages)
        .pipe(imagemin({
            optimizationLevel: 3,
            progressive: true,
            svgoPlugins: [{removeViewBox: false}],
            interlaced: true
        }))
-       .pipe(gulp.dest(path.buildImages))
+       .pipe(gulp.dest(path.buildImages));
 });
 
 /*
@@ -76,7 +76,7 @@ gulp.task('img', function () {
 * "cleanSrcImg"
 * */
 gulp.task('cleanSrcImg', function () {
-    return del.sync(['../src/image/**/*', '!../src/image', '!../src/image/.gitkeep'], {force: true})
+    return del(['../src/image/**/*', '!../src/image', '!../src/image/.gitkeep'], {force: true});
 });
 
 gulp.task('watch', function () {
