@@ -13,6 +13,7 @@ const   gulp            =       require("gulp"),
         cssnano         =       require("gulp-cssnano"),
         rename          =       require('gulp-rename'),
         watch           =       require("gulp-watch"),
+        htmlmin         =       require('gulp-htmlmin'),
         run             =       require("run-sequence");
 
 const path = {
@@ -22,7 +23,7 @@ const path = {
     buildJs: '../build/js/',
     srcImages : '../src/image/**/*.*',
     buildImages: '../build/image/',
-    srcHTML: '../src/html/',
+    srcHTML: '../src/html/*.html',
     buildHTML: '../build/',
     srcFonts: '../src/fonts/',
     buildFonts: '../build/fonts/',
@@ -53,6 +54,12 @@ gulp.task('js', function () {
         .pipe(gulp.dest(path.buildJs))
 });
 
+gulp.task('html', function () {
+    gulp.src([path.srcHTML])
+      .pipe(htmlmin({ collapseWhitespace: true }))
+      .pipe(gulp.dest(path.buildHTML));
+});
+
 gulp.task('img', function () {
    gulp.src(path.srcImages)
        .pipe(imagemin({
@@ -79,6 +86,9 @@ gulp.task('watch', function () {
    watch([path.srcJs], function () {
        gulp.start('js')
    });
+   watch([path.srcHTML], function () {
+    gulp.start('html')
+});
    /* watch([path.srcImages], function () {
        gulp.start('img');
    }); */
@@ -89,7 +99,7 @@ gulp.task('default', function (cb) {
    run(
        'scss',
        'js',
-       'img',
+       'html',
        'watch',
 
        cb
