@@ -150,5 +150,55 @@ $color: white;
 #sidebar { width: grid-width(5); }
 
 
+/* The Block, Element, Modifier methodology (commonly referred to as BEM) 
+* is a popular naming convention for classes in HTML and CSS.
+* Another smart part of BEM is that everything is a class and nothing is nested.
+* Here are some basic principles example... */
+
+/* Block component */
+.btn {
+    background-color: #00ff00;
+
+    &__price {
+        /* Element that depends upon the block */
+        background-color: #333;
+        color: #fff;
+        padding-right: 12px;
+        padding-left: 12px;
+        margin-right: -10px; /* realign button text padding */
+        opacity: .4;
+        border-radius: 5px 0 0 5px;
+
+        &--red {
+           /* Modifier */
+           color: #ff0000; 
+        }
+    }
+
+    &--big {
+        /* Modifier */
+        font-size: 28px;
+        padding: 10px;
+        font-weight: 400;
+    }
+  
+
+    &--orange {
+        /* Modifier that changes the style of the block */
+        border-color: #FF4136;
+        color: white;
+        background-color: #FF4136;
+    }
+
+    &--green {
+        /* Modifier */
+        border-color: #3D9970;
+        color: white;
+        background-color: #3D9970;
+    }
+}
+
+
+
 
 @import 'responsive/main-media-queries';
