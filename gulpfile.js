@@ -63,7 +63,6 @@ const libs = [
 
 
 function sassTask(cb) {
-    fse.ensureDir(paths.styles.dest);
     src(paths.styles.src)
        .pipe(plumber())
        .pipe(sourcemaps.init())
@@ -95,7 +94,6 @@ function jsProcessor(source, scriptname) {
 }
 
 function jsTask(cb) {
-    fse.ensureDir(paths.scripts.dest);
     let result = paths.scripts.config.map( scriptConf => jsProcessor( scriptConf.src, scriptConf.script ) );
     Promise.all(result).then( () => cb() );
 }
@@ -116,7 +114,6 @@ function watchBoth() {
 function imgTask(cb) {
     const imagemin = require('gulp-imagemin');
 
-    fse.ensureDir(paths.images.dest);
     src(paths.images.src)
        .pipe(imagemin({
            optimizationLevel: 3,
