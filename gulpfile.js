@@ -9,6 +9,7 @@ const   sourcemaps      = require("gulp-sourcemaps"),
         cssnano         = require("cssnano"),
         sass            = require('gulp-sass'),
         concat          = require('gulp-concat'),
+        babel           = require('gulp-babel'),
         uglify          = require("gulp-uglify-es").default;
 
 const paths = {
@@ -84,6 +85,7 @@ function jsProcessor(source, scriptname) {
             .pipe(plumber())
             .pipe(sourcemaps.init())
             .pipe(concat(scriptname))
+            .pipe(babel())
             .pipe(dest(paths.scripts.dest))
             .pipe(uglify())
             .pipe(rename({suffix: '.min'}))
