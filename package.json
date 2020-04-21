@@ -6,6 +6,11 @@
   "main": "gulpfile.js",
   "author": "KLarpen <klarpen@gmail.com>",
   "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KLarpen/asset-src-gulp-template.git"
+  },
+  "homepage": "https://github.com/KLarpen/asset-src-gulp-template#readme",
   "dependencies": {
     "bootstrap": "^4.4.1",
     "jquery": "^3.5.0",
