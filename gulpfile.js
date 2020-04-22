@@ -60,7 +60,7 @@ const libs = [
         dest: '../assets/js/bootstrap/'
     },
     /* {
-        // Copy the main style file to the parent project's directory 
+        // Copy the main style file the project's root directory 
         // (as for the WordPress Theme)
         from: '../assets/css/style.css',
         dest: '../style.css' 
