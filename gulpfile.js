@@ -58,7 +58,13 @@ const libs = [
     {
         from: './node_modules/bootstrap/dist/js/',
         dest: '../assets/js/bootstrap/'
-    }
+    },
+    /* {
+        // Copy the main style file to the parent project's directory 
+        // (as for the WordPress Theme)
+        from: '../assets/css/style.css',
+        dest: '../style.css' 
+    } */
 ];
 
 
@@ -165,12 +171,12 @@ exports.lib      = libTask;
 exports.cleanSrcImg = cleanSrcImg;
 
 exports.build = series(
-    libTask,
     parallel (
         sassTask, 
         jsTask,
         imgTask
-    )
+    ),
+    libTask
 );
 
 exports.default = series(
